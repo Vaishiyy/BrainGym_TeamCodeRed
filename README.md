@@ -1,6 +1,6 @@
 # BrainGym_TeamCodeRed
 
-Snapshots:
+Screenshots:
 
 Home Page:
 <img width="2471" height="1395" alt="Screenshot 2026-02-19 183313" src="https://github.com/user-attachments/assets/ccb73c3c-d6a7-4b84-baf9-0c23d5695e0e" />
