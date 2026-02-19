@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Gym | Zen Rake</title>
+  <meta name="description" content="Play Zen Rake relaxation game." />
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="topbar">
+    <a class="brand" href="home.html">
+      <span class="brand-title">BRAIN GYM</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="nav-btn" href="home.html">Home</a>
+      <a class="nav-btn" href="track-progress.html">Track Progress</a>
+      <a class="nav-btn" href="set-goals.html">Set Goals</a>
+      <a class="nav-btn" href="workout-map.html">Workout Map</a>
+    </nav>
+
+    <div class="account">
+      <button id="sign-out-btn" class="signout-btn" type="button">Sign Out</button>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+  </header>
+
+  <main class="content-page">
+    <p class="welcome">Relaxation Game</p>
+    <h1 class="page-heading">Zen Rake</h1>
+
+    <section class="game-frame-wrap">
+      <iframe class="game-frame" title="Zen Rake" src="games/zen-rake/dist/index.html"></iframe>
+    </section>
+
+    <div class="game-actions">
+      <a class="nav-btn active" href="relax-games.html">Back To Relaxation Games</a>
+    </div>
+  </main>
+
+  <script src="home.js" defer></script>
+</body>
+</html>

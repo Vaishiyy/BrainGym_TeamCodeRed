@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 223 78% 44%;
+
+    --card: 210 40% 98%;
+    --card-foreground: 223 78% 44%;
+
+    --popover: 210 40% 98%;
+    --popover-foreground: 223 78% 44%;
+
+    --primary: 223 78% 44%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 214 100% 96%;
+    --secondary-foreground: 223 78% 44%;
+
+    --muted: 214 100% 97%;
+    --muted-foreground: 221 83% 58%;
+
+    --accent: 214 100% 96%;
+    --accent-foreground: 223 78% 44%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 66% 86%;
+    --input: 214 66% 92%;
+    --ring: 223 78% 44%;
+
+    --radius: 0px;
+
+    --font-pixel: 'Press Start 2P', monospace;
+    --crt-glow: 0 0 10px rgba(29, 78, 216, 0.55), 0 0 20px rgba(59, 130, 246, 0.35), 0 0 40px rgba(96, 165, 250, 0.2);
+    --crt-glow-sm: 0 0 4px rgba(29, 78, 216, 0.45), 0 0 8px rgba(59, 130, 246, 0.25);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-pixel);
+    cursor: default;
+    overflow: hidden;
+  }
+}
+
+/* CRT Scanlines */
+.crt-scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(59, 130, 246, 0.08) 2px,
+    rgba(59, 130, 246, 0.08) 4px
+  );
+}
+
+/* CRT screen flicker */
+.crt-flicker {
+  animation: crt-flicker 0.1s infinite alternate;
+}
+
+@keyframes crt-flicker {
+  0% { opacity: 0.97; }
+  100% { opacity: 1; }
+}
+
+/* CRT vignette */
+.crt-vignette {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 60%,
+    rgba(59, 130, 246, 0.14) 100%
+  );
+}
+
+/* Text glow effect */
+.text-glow {
+  text-shadow: var(--crt-glow);
+}
+
+.text-glow-sm {
+  text-shadow: var(--crt-glow-sm);
+}
+
+/* Boot screen */
+@keyframes boot-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.boot-cursor {
+  animation: boot-blink 1s step-end infinite;
+}
+
+@keyframes boot-reveal {
+  from { max-height: 0; }
+  to { max-height: 600px; }
+}
+
+.boot-reveal {
+  animation: boot-reveal 3s steps(20) forwards;
+  overflow: hidden;
+}
+
+/* Pixel button hover */
+.pixel-btn {
+  border: 2px solid hsl(var(--foreground));
+  transition: all 0.1s step-end;
+  image-rendering: pixelated;
+}
+
+.pixel-btn:hover {
+  background: hsl(var(--foreground));
+  color: hsl(var(--background));
+  box-shadow: var(--crt-glow-sm);
+}

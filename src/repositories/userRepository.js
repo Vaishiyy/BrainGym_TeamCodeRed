@@ -4,6 +4,11 @@ function createUserRepository(db) {
   const users = db.collection("users");
   const loginEvents = db.collection("login_events");
   const gameProgressEvents = db.collection("game_progress_events");
+  const defaultGoals = {
+    week: { days: 5, timesPerDay: 1, updatedAt: null },
+    month: { days: 20, timesPerDay: 1, updatedAt: null },
+    year: { days: 240, timesPerDay: 1, updatedAt: null }
+  };
 
   function toObjectId(value) {
     if (!value) {
@@ -62,6 +67,7 @@ function createUserRepository(db) {
         lastWorkoutCompletedAt: null,
         gameStats: {}
       },
+      goals: defaultGoals,
       activity: {
         createdAt: now,
         updatedAt: now,
@@ -303,12 +309,168 @@ function createUserRepository(db) {
     };
   }
 
+  async function getGoalProgress({ userId, email, startDate, endDate, period }) {
+    const user = await findUserByLookup({ userId, email });
+    if (!user) {
+      throw new Error("User not found.");
+    }
+
+    const sessions = await gameProgressEvents
+      .find({
+        userId: user._id,
+        completedAt: {
+          $gte: startDate,
+          $lt: endDate
+        },
+        $expr: { $eq: ["$stage", "$totalStages"] }
+      })
+      .sort({ completedAt: 1 })
+      .toArray();
+
+    const uniqueDayKeys = new Set(
+      sessions.map((entry) => {
+        const completedAt = new Date(entry.completedAt);
+        if (Number.isNaN(completedAt.getTime())) {
+          return null;
+        }
+        return completedAt.toISOString().slice(0, 10);
+      }).filter(Boolean)
+    );
+
+    return {
+      userId: user._id.toString(),
+      email: user.email,
+      period,
+      startDate,
+      endDate,
+      achievedSessions: sessions.length,
+      achievedDays: uniqueDayKeys.size,
+      sessionDates: Array.from(uniqueDayKeys)
+    };
+  }
+
+  async function getGoalSettings({ userId, email }) {
+    const user = await findUserByLookup({ userId, email });
+    if (!user) {
+      throw new Error("User not found.");
+    }
+
+    const goals = user.goals || defaultGoals;
+    return {
+      userId: user._id.toString(),
+      email: user.email,
+      goals: {
+        week: {
+          days: Number(goals.week?.days) || defaultGoals.week.days,
+          timesPerDay: Number(goals.week?.timesPerDay) || defaultGoals.week.timesPerDay
+        },
+        month: {
+          days: Number(goals.month?.days) || defaultGoals.month.days,
+          timesPerDay: Number(goals.month?.timesPerDay) || defaultGoals.month.timesPerDay
+        },
+        year: {
+          days: Number(goals.year?.days) || defaultGoals.year.days,
+          timesPerDay: Number(goals.year?.timesPerDay) || defaultGoals.year.timesPerDay
+        }
+      }
+    };
+  }
+
+  async function saveGoalSetting({ userId, email, period, days, timesPerDay }) {
+    const user = await findUserByLookup({ userId, email });
+    if (!user) {
+      throw new Error("User not found.");
+    }
+
+    const normalizedPeriod = String(period || "").toLowerCase();
+    if (!["week", "month", "year"].includes(normalizedPeriod)) {
+      throw new Error("Invalid goal period.");
+    }
+
+    const safeDays = Math.max(1, Math.round(Number(days) || 1));
+    const safeTimesPerDay = Math.max(1, Math.round(Number(timesPerDay) || 1));
+    const now = new Date();
+
+    await users.updateOne(
+      { _id: user._id },
+      {
+        $set: {
+          "activity.updatedAt": now,
+          [`goals.${normalizedPeriod}`]: {
+            days: safeDays,
+            timesPerDay: safeTimesPerDay,
+            updatedAt: now
+          }
+        }
+      }
+    );
+
+    return getGoalSettings({ userId: user._id.toString(), email: user.email });
+  }
+
+  async function getWorkoutCalendar({ userId, email, year }) {
+    const user = await findUserByLookup({ userId, email });
+    if (!user) {
+      throw new Error("User not found.");
+    }
+
+    const parsedYear = Number.parseInt(String(year || ""), 10);
+    const safeYear =
+      Number.isInteger(parsedYear) && parsedYear >= 2000 && parsedYear <= 2100
+        ? parsedYear
+        : new Date().getFullYear();
+
+    const startDate = new Date(Date.UTC(safeYear, 0, 1, 0, 0, 0, 0));
+    const endDate = new Date(Date.UTC(safeYear + 1, 0, 1, 0, 0, 0, 0));
+
+    const dayCounts = await gameProgressEvents
+      .aggregate([
+        {
+          $match: {
+            userId: user._id,
+            completedAt: {
+              $gte: startDate,
+              $lt: endDate
+            }
+          }
+        },
+        {
+          $group: {
+            _id: {
+              $dateToString: {
+                format: "%Y-%m-%d",
+                date: "$completedAt",
+                timezone: "UTC"
+              }
+            },
+            count: { $sum: 1 }
+          }
+        },
+        { $sort: { _id: 1 } }
+      ])
+      .toArray();
+
+    return {
+      userId: user._id.toString(),
+      email: user.email,
+      year: safeYear,
+      dayCounts: dayCounts.map((entry) => ({
+        date: entry._id,
+        count: Number(entry.count) || 0
+      }))
+    };
+  }
+
   return {
     findUserByEmail,
     createUser,
     recordLogin,
     recordGameCompletion,
-    getProgressSummary
+    getProgressSummary,
+    getGoalSettings,
+    saveGoalSetting,
+    getGoalProgress,
+    getWorkoutCalendar
   };
 }
 

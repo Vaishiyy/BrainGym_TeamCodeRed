@@ -1,4 +1,6 @@
 function createProgressService(userRepository) {
+  const VALID_PERIODS = new Set(["week", "month", "year"]);
+
   function parseDate(input, label) {
     const value = new Date(String(input || ""));
     if (Number.isNaN(value.getTime())) {
@@ -21,6 +23,46 @@ function createProgressService(userRepository) {
       return 0;
     }
     return Math.max(0, Math.round(value));
+  }
+
+  function parsePeriod(input) {
+    const period = String(input || "week").trim().toLowerCase();
+    if (!VALID_PERIODS.has(period)) {
+      throw new Error("Period must be week, month, or year.");
+    }
+    return period;
+  }
+
+  function getPeriodBounds(periodInput) {
+    const normalizedPeriod = parsePeriod(periodInput);
+
+    const now = new Date();
+    const start = new Date(now);
+    start.setHours(0, 0, 0, 0);
+
+    if (normalizedPeriod === "week") {
+      const mondayOffset = (start.getDay() + 6) % 7;
+      start.setDate(start.getDate() - mondayOffset);
+    } else if (normalizedPeriod === "month") {
+      start.setDate(1);
+    } else {
+      start.setMonth(0, 1);
+    }
+
+    const end = new Date(start);
+    if (normalizedPeriod === "week") {
+      end.setDate(end.getDate() + 7);
+    } else if (normalizedPeriod === "month") {
+      end.setMonth(end.getMonth() + 1);
+    } else {
+      end.setFullYear(end.getFullYear() + 1);
+    }
+
+    return {
+      period: normalizedPeriod,
+      startDate: start,
+      endDate: end
+    };
   }
 
   async function recordCompletion(payload) {
@@ -85,9 +127,79 @@ function createProgressService(userRepository) {
     return userRepository.getProgressSummary({ userId, email });
   }
 
+  async function getGoalProgress(query) {
+    const userId = String(query.userId || "").trim();
+    const email = String(query.email || "").trim().toLowerCase();
+
+    if (!userId && !email) {
+      throw new Error("User information is required.");
+    }
+
+    const { period, startDate, endDate } = getPeriodBounds(query.period);
+    return userRepository.getGoalProgress({
+      userId,
+      email,
+      period,
+      startDate,
+      endDate
+    });
+  }
+
+  async function getGoalSettings(query) {
+    const userId = String(query.userId || "").trim();
+    const email = String(query.email || "").trim().toLowerCase();
+
+    if (!userId && !email) {
+      throw new Error("User information is required.");
+    }
+
+    return userRepository.getGoalSettings({ userId, email });
+  }
+
+  async function saveGoalSetting(payload) {
+    const userId = String(payload.userId || "").trim();
+    const email = String(payload.email || "").trim().toLowerCase();
+
+    if (!userId && !email) {
+      throw new Error("User information is required.");
+    }
+
+    const period = parsePeriod(payload.period);
+    const days = parsePositiveInt(payload.days, "Days");
+    const timesPerDay = parsePositiveInt(payload.timesPerDay, "Times per day");
+
+    return userRepository.saveGoalSetting({
+      userId,
+      email,
+      period,
+      days,
+      timesPerDay
+    });
+  }
+
+  async function getWorkoutCalendar(query) {
+    const userId = String(query.userId || "").trim();
+    const email = String(query.email || "").trim().toLowerCase();
+
+    if (!userId && !email) {
+      throw new Error("User information is required.");
+    }
+
+    const yearInput = query.year;
+    return userRepository.getWorkoutCalendar({
+      userId,
+      email,
+      year: yearInput
+    });
+  }
+
   return {
     recordCompletion,
-    getSummary
+    getSummary,
+    getGoalSettings,
+    saveGoalSetting,
+    getGoalProgress,
+    getWorkoutCalendar
   };
 }
 

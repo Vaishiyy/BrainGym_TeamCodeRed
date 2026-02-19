@@ -19,7 +19,7 @@
       <a class="nav-btn" href="home.html">Home</a>
       <a class="nav-btn" href="track-progress.html">Track Progress</a>
       <a class="nav-btn active" href="set-goals.html">Set Goals</a>
-      <a class="nav-btn" href="home.html#map-section">Daily Workout Map</a>
+      <a class="nav-btn" href="workout-map.html">Workout Map</a>
     </nav>
 
     <div class="account">
@@ -28,10 +28,53 @@
     </div>
   </header>
 
-  <main class="content-page">
+  <main class="content-page goals-page">
     <p class="welcome">Welcome, <span id="user-name">Player</span></p>
     <h1 class="page-heading">Set Goals</h1>
-    <p class="page-copy">Suggested goal: complete at least 5 daily workouts this week and 20 workouts this month.</p>
+    <p class="page-copy">Set how many days and how many times per day you want to complete your daily brain workout.</p>
+
+    <section class="form-card goals-form-card">
+      <form id="goal-form" class="goals-form">
+        <label class="form-field">
+          <span>Goal Period</span>
+          <select id="goal-period" name="period" required>
+            <option value="week">Week</option>
+            <option value="month">Month</option>
+            <option value="year">Year</option>
+          </select>
+        </label>
+
+        <label class="form-field">
+          <span>How Many Days</span>
+          <input id="goal-days" name="days" type="number" min="1" max="7" value="5" required />
+        </label>
+
+        <label class="form-field">
+          <span>How Many Times Per Day</span>
+          <input id="goal-times" name="timesPerDay" type="number" min="1" max="10" value="1" required />
+        </label>
+
+        <button class="save-btn" type="submit">Save Goal</button>
+      </form>
+      <p id="goal-status" class="status-text"></p>
+    </section>
+
+    <section class="profile-card goals-progress-card" aria-label="Goal progress">
+      <h2 class="history-title">Goal Progress (<span id="goal-period-label">This Week</span>)</h2>
+      <div class="goals-progress-grid">
+        <div class="goal-progress-item">
+          <p>Days Achieved</p>
+          <p><span id="goal-achieved-days">0</span> / <span id="goal-target-days">0</span></p>
+          <div class="goal-bar"><span id="goal-days-fill" style="width: 0%"></span></div>
+        </div>
+        <div class="goal-progress-item">
+          <p>Workout Sessions Achieved</p>
+          <p><span id="goal-achieved-sessions">0</span> / <span id="goal-target-sessions">0</span></p>
+          <div class="goal-bar"><span id="goal-sessions-fill" style="width: 0%"></span></div>
+        </div>
+      </div>
+      <p id="goal-achievement-text" class="page-copy goals-achievement-text">You have achieved 0% of your goal.</p>
+    </section>
   </main>
 
   <script src="home.js" defer></script>

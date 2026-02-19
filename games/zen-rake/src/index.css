@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 8%;
+    --foreground: 0 0% 85%;
+
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 85%;
+
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 85%;
+
+    --primary: 0 0% 75%;
+    --primary-foreground: 0 0% 8%;
+
+    --secondary: 0 0% 18%;
+    --secondary-foreground: 0 0% 75%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 50%;
+
+    --accent: 0 0% 20%;
+    --accent-foreground: 0 0% 85%;
+
+    --destructive: 0 60% 40%;
+    --destructive-foreground: 0 0% 90%;
+
+    --border: 0 0% 22%;
+    --input: 0 0% 22%;
+    --ring: 0 0% 50%;
+
+    --radius: 0.25rem;
+
+    /* Sand colors */
+    --sand-light: 40 15% 72%;
+    --sand-mid: 38 12% 58%;
+    --sand-dark: 36 10% 42%;
+    --sand-groove: 35 8% 32%;
+
+    /* CRT palette modes */
+    --crt-green: 120 100% 35%;
+    --crt-green-light: 120 80% 55%;
+    --crt-amber: 35 100% 45%;
+    --crt-amber-light: 38 90% 60%;
+
+    /* Retro UI */
+    --retro-border: 0 0% 30%;
+    --retro-glow: 0 0% 60%;
+
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 0 0% 85%;
+    --sidebar-primary: 0 0% 75%;
+    --sidebar-primary-foreground: 0 0% 8%;
+    --sidebar-accent: 0 0% 18%;
+    --sidebar-accent-foreground: 0 0% 85%;
+    --sidebar-border: 0 0% 22%;
+    --sidebar-ring: 0 0% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'VT323', monospace;
+  }
+}
+
+/* CRT Scanlines overlay */
+.crt-scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    hsla(0, 0%, 0%, 0.08) 2px,
+    hsla(0, 0%, 0%, 0.08) 4px
+  );
+}
+
+/* CRT Vignette */
+.crt-vignette {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    hsla(0, 0%, 0%, 0.6) 100%
+  );
+}
+
+/* Screen noise animation */
+@keyframes noise {
+  0%, 100% { opacity: 0.03; }
+  50% { opacity: 0.06; }
+}
+
+.screen-noise {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 98;
+  opacity: 0.04;
+  animation: noise 0.5s steps(3) infinite;
+}
+
+/* Retro button style */
+.retro-btn {
+  font-family: 'VT323', monospace;
+  font-size: 1.125rem;
+  letter-spacing: 0.05em;
+  padding: 0.4rem 1rem;
+  border: 1px solid hsl(var(--retro-border));
+  background: hsl(var(--secondary));
+  color: hsl(var(--foreground));
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+}
+
+.retro-btn:hover {
+  background: hsl(var(--accent));
+  border-color: hsl(var(--retro-glow));
+}
+
+.retro-btn.active {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--retro-glow));
+}
+
+/* Palette modes applied to canvas wrapper */
+.palette-grayscale { filter: grayscale(100%); }
+.palette-green { filter: grayscale(100%) sepia(100%) saturate(300%) hue-rotate(80deg) brightness(0.8); }
+.palette-amber { filter: grayscale(100%) sepia(100%) saturate(200%) hue-rotate(-10deg) brightness(0.9); }

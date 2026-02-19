@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Gym | Workout Map</title>
+  <meta name="description" content="View your Brain Gym workout activity map by day." />
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="topbar">
+    <a class="brand" href="home.html">
+      <span class="brand-title">BRAIN GYM</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="nav-btn" href="home.html">Home</a>
+      <a class="nav-btn" href="track-progress.html">Track Progress</a>
+      <a class="nav-btn" href="set-goals.html">Set Goals</a>
+      <a class="nav-btn active" href="workout-map.html">Workout Map</a>
+    </nav>
+
+    <div class="account">
+      <button id="sign-out-btn" class="signout-btn" type="button">Sign Out</button>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+  </header>
+
+  <main class="content-page workout-map-page">
+    <p class="welcome">Welcome, <span id="user-name">Player</span></p>
+    <h1 class="page-heading">Workout Map</h1>
+    <p class="page-copy">Green cells show days you played. Darker green means more games on that day.</p>
+
+    <section class="profile-card workout-map-card">
+      <div class="workout-map-wrap">
+        <div class="workout-weekdays" aria-hidden="true">
+          <span>Mon</span>
+          <span>Wed</span>
+          <span>Fri</span>
+          <span>Sun</span>
+        </div>
+        <div class="workout-map-block">
+          <div id="workout-heatmap" class="workout-heatmap" aria-label="Workout activity heatmap"></div>
+          <div id="workout-months" class="workout-months" aria-hidden="true"></div>
+        </div>
+      </div>
+      <p id="map-hint" class="panel-copy">Loading workout map...</p>
+    </section>
+  </main>
+
+  <script src="home.js" defer></script>
+</body>
+</html>

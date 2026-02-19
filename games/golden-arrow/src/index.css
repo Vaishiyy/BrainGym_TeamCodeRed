@@ -6,44 +6,44 @@
 
 @layer base {
   :root {
-    --background: 45 100% 96%;
-    --foreground: 40 60% 12%;
+    --background: 206 44% 84%;
+    --foreground: 213 34% 21%;
 
-    --card: 45 80% 92%;
-    --card-foreground: 40 60% 12%;
+    --card: 206 34% 76%;
+    --card-foreground: 213 34% 21%;
 
-    --popover: 45 80% 94%;
-    --popover-foreground: 40 60% 12%;
+    --popover: 206 36% 80%;
+    --popover-foreground: 213 34% 21%;
 
-    --primary: 45 100% 50%;
-    --primary-foreground: 40 60% 12%;
+    --primary: 28 98% 55%;
+    --primary-foreground: 213 34% 21%;
 
-    --secondary: 38 90% 60%;
-    --secondary-foreground: 40 60% 12%;
+    --secondary: 205 38% 67%;
+    --secondary-foreground: 213 34% 21%;
 
-    --muted: 45 40% 88%;
-    --muted-foreground: 40 30% 40%;
+    --muted: 206 26% 74%;
+    --muted-foreground: 210 25% 43%;
 
-    --accent: 30 100% 55%;
-    --accent-foreground: 40 60% 12%;
+    --accent: 28 95% 56%;
+    --accent-foreground: 213 34% 21%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 40 50% 80%;
-    --input: 40 50% 80%;
-    --ring: 45 100% 50%;
+    --border: 206 30% 65%;
+    --input: 206 30% 65%;
+    --ring: 28 95% 56%;
 
     --radius: 1rem;
 
-    --game-bg: 45 60% 20%;
-    --game-surface: 45 50% 28%;
-    --game-text: 45 100% 92%;
-    --game-arrow: 45 100% 60%;
-    --game-arrow-active: 45 100% 75%;
-    --game-correct: 140 60% 50%;
-    --game-wrong: 0 70% 55%;
-    --game-glow: 45 100% 50%;
+    --game-bg: 206 40% 81%;
+    --game-surface: 207 30% 72%;
+    --game-text: 213 34% 21%;
+    --game-arrow: 28 98% 55%;
+    --game-arrow-active: 30 100% 66%;
+    --game-correct: 147 34% 48%;
+    --game-wrong: 4 70% 58%;
+    --game-glow: 202 42% 60%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;

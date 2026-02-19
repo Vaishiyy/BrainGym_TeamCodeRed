@@ -23,6 +23,8 @@ const accountContainer = avatarElement ? avatarElement.closest(".account") : nul
 const signOutButton = document.getElementById("sign-out-btn");
 const startWorkoutButton = document.getElementById("start-workout-btn");
 const progressCopy = document.getElementById("map-hint");
+const workoutHeatmap = document.getElementById("workout-heatmap");
+const workoutMonths = document.getElementById("workout-months");
 const navButtons = Array.from(document.querySelectorAll(".nav-btn"));
 const relaxArrowButton = document.getElementById("relax-arrow-btn");
 const backHomeButton = document.getElementById("back-home-btn");
@@ -39,6 +41,19 @@ const settingsEmailNotifications = document.getElementById("setting-email-notifi
 const settingsSoundEffects = document.getElementById("setting-sound-effects");
 const settingsHighContrast = document.getElementById("setting-high-contrast");
 const settingsStatus = document.getElementById("settings-status");
+const goalForm = document.getElementById("goal-form");
+const goalPeriodInput = document.getElementById("goal-period");
+const goalDaysInput = document.getElementById("goal-days");
+const goalTimesInput = document.getElementById("goal-times");
+const goalStatus = document.getElementById("goal-status");
+const goalPeriodLabel = document.getElementById("goal-period-label");
+const goalAchievedDays = document.getElementById("goal-achieved-days");
+const goalTargetDays = document.getElementById("goal-target-days");
+const goalAchievedSessions = document.getElementById("goal-achieved-sessions");
+const goalTargetSessions = document.getElementById("goal-target-sessions");
+const goalDaysFill = document.getElementById("goal-days-fill");
+const goalSessionsFill = document.getElementById("goal-sessions-fill");
+const goalAchievementText = document.getElementById("goal-achievement-text");
 const gamePage = document.querySelector(".game-page");
 const gameNextButton = document.getElementById("game-next-btn");
 const gameTimer = document.getElementById("game-timer");
@@ -56,6 +71,11 @@ const scoreChart = document.getElementById("score-chart");
 const scoreLegend = document.getElementById("score-legend");
 const scoreGraphStatus = document.getElementById("score-graph-status");
 let profileMenu = null;
+let goalSettingsByPeriod = {
+  week: { days: 5, timesPerDay: 1 },
+  month: { days: 20, timesPerDay: 1 },
+  year: { days: 240, timesPerDay: 1 }
+};
 
 const WEEKLY_MAP_KEY = "brainGymWeeklyMap";
 const SETTINGS_KEY = "brainGymSettings";
@@ -67,7 +87,32 @@ const DEFAULT_SETTINGS = {
   soundEffects: true,
   highContrast: false
 };
-const TODAY_INDEX = (new Date().getDay() + 6) % 7; // Monday=0 ... Sunday=6
+const GAME_NAME_OVERRIDES = {
+  "neon-rod-racer": "Reaction Game",
+  "puzzle-progression": "Logic Puzzle",
+  "golden-arrow": "Pattern Matching"
+};
+
+function getGameDisplayName(gameId, fallbackName) {
+  const normalizedId = String(gameId || "").trim().toLowerCase();
+  const normalizedName = String(fallbackName || "").trim().toLowerCase();
+
+  if (GAME_NAME_OVERRIDES[normalizedId]) {
+    return GAME_NAME_OVERRIDES[normalizedId];
+  }
+
+  if (normalizedName === "neon rod racer") {
+    return "Reaction Game";
+  }
+  if (normalizedName === "puzzle progression") {
+    return "Logic Puzzle";
+  }
+  if (normalizedName === "golden arrow" || normalizedName === "pattern tracking") {
+    return "Pattern Matching";
+  }
+
+  return String(fallbackName || gameId || "Game");
+}
 
 function persistUser() {
   localStorage.setItem("brainGymUser", JSON.stringify(storedUser));
@@ -196,7 +241,8 @@ function renderScoreLegend(seriesList, colorByGameId) {
     swatch.style.background = colorByGameId[series.gameId] || "#2c9ce0";
 
     const label = document.createElement("span");
-    label.textContent = `${series.gameName} (${series.scoreUnit || "points"})`;
+    const displayName = getGameDisplayName(series.gameId, series.gameName);
+    label.textContent = `${displayName} (${series.scoreUnit || "points"})`;
 
     item.append(swatch, label);
     scoreLegend.appendChild(item);
@@ -222,9 +268,10 @@ function renderScoreGraph(seriesList) {
   }
 
   const svgNs = "http://www.w3.org/2000/svg";
-  const width = 900;
-  const height = 360;
-  const padding = { top: 28, right: 20, bottom: 48, left: 52 };
+  const width = 1400;
+  const height = 620;
+  const padding = { top: 42, right: 40, bottom: 76, left: 74 };
+  scoreChart.setAttribute("viewBox", `0 0 ${width} ${height}`);
   const plotWidth = width - padding.left - padding.right;
   const plotHeight = height - padding.top - padding.bottom;
   const maxPlays = Math.max(
@@ -353,6 +400,153 @@ function applySettings(value) {
   document.body.classList.toggle("high-contrast", Boolean(value.highContrast));
 }
 
+function getGoalMaxDays(period) {
+  const normalizedPeriod = String(period || "week").toLowerCase();
+  if (normalizedPeriod === "week") {
+    return 7;
+  }
+  if (normalizedPeriod === "month") {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  }
+  const year = new Date().getFullYear();
+  const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+  return isLeapYear ? 366 : 365;
+}
+
+function normalizeGoalSettings(raw) {
+  const normalizedPeriod = ["week", "month", "year"].includes(String(raw?.period || "").toLowerCase())
+    ? String(raw.period).toLowerCase()
+    : "week";
+  const maxDays = getGoalMaxDays(normalizedPeriod);
+  const days = Math.min(
+    maxDays,
+    Math.max(1, Number.parseInt(raw?.days || "5", 10) || 5)
+  );
+  const timesPerDay = Math.min(
+    10,
+    Math.max(1, Number.parseInt(raw?.timesPerDay || "1", 10) || 1)
+  );
+
+  return {
+    period: normalizedPeriod,
+    days,
+    timesPerDay
+  };
+}
+
+function getGoalSettingsForPeriod(period) {
+  const normalizedPeriod = ["week", "month", "year"].includes(String(period || "").toLowerCase())
+    ? String(period).toLowerCase()
+    : "week";
+  const entry = goalSettingsByPeriod[normalizedPeriod] || goalSettingsByPeriod.week;
+  return normalizeGoalSettings({
+    period: normalizedPeriod,
+    days: entry.days,
+    timesPerDay: entry.timesPerDay
+  });
+}
+
+async function fetchGoalSettingsFromDatabase() {
+  const { userId, email } = getUserLookup();
+  if (!userId && !email) {
+    return;
+  }
+
+  const params = new URLSearchParams();
+  if (userId) {
+    params.set("userId", userId);
+  } else {
+    params.set("email", email);
+  }
+
+  const response = await fetch(`/api/progress/goals?${params.toString()}`);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(payload.error || "Unable to load saved goals.");
+  }
+
+  const goals = payload.goals?.goals || {};
+  goalSettingsByPeriod = {
+    week: normalizeGoalSettings({ period: "week", ...goals.week }),
+    month: normalizeGoalSettings({ period: "month", ...goals.month }),
+    year: normalizeGoalSettings({ period: "year", ...goals.year })
+  };
+}
+
+async function saveGoalSettingToDatabase({ period, days, timesPerDay }) {
+  const { userId, email } = getUserLookup();
+  if (!userId && !email) {
+    throw new Error("User information is required.");
+  }
+
+  const settings = normalizeGoalSettings({ period, days, timesPerDay });
+  const response = await fetch("/api/progress/goals", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      userId,
+      email,
+      period: settings.period,
+      days: settings.days,
+      timesPerDay: settings.timesPerDay
+    })
+  });
+
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(payload.error || "Unable to save goal.");
+  }
+
+  const goals = payload.goals?.goals || {};
+  goalSettingsByPeriod = {
+    week: normalizeGoalSettings({ period: "week", ...goals.week }),
+    month: normalizeGoalSettings({ period: "month", ...goals.month }),
+    year: normalizeGoalSettings({ period: "year", ...goals.year })
+  };
+  return getGoalSettingsForPeriod(settings.period);
+}
+
+function setGoalStatus(message, state = "") {
+  if (!goalStatus) {
+    return;
+  }
+  goalStatus.textContent = message;
+  goalStatus.dataset.state = state;
+}
+
+function getPeriodLabel(period) {
+  if (period === "month") {
+    return "This Month";
+  }
+  if (period === "year") {
+    return "This Year";
+  }
+  return "This Week";
+}
+
+function updateGoalDaysInputLimit(period) {
+  if (!goalDaysInput) {
+    return;
+  }
+
+  const maxDays = getGoalMaxDays(period);
+  goalDaysInput.max = String(maxDays);
+  const currentValue = Number.parseInt(goalDaysInput.value || "1", 10) || 1;
+  if (currentValue > maxDays) {
+    goalDaysInput.value = String(maxDays);
+  }
+}
+
+function toPercent(numerator, denominator) {
+  if (denominator <= 0) {
+    return 0;
+  }
+  return Math.min(100, Math.round((numerator / denominator) * 100));
+}
+
 function loadWeeklyMap() {
   const raw = localStorage.getItem(WEEKLY_MAP_KEY);
   if (!raw) {
@@ -392,16 +586,205 @@ function renderWeeklyMap() {
     }
   }
 
-  if (progressCopy) {
+  if (progressCopy && document.getElementById("weekly-map")) {
     progressCopy.textContent = `You have completed ${completedCount} workout${completedCount === 1 ? "" : "s"} this week.`;
   }
 }
 
+async function loadWeeklyMapFromDatabase() {
+  if (!document.getElementById("weekly-map")) {
+    return;
+  }
+
+  const { userId, email } = getUserLookup();
+  if (!userId && !email) {
+    return;
+  }
+
+  try {
+    const params = new URLSearchParams();
+    if (userId) {
+      params.set("userId", userId);
+    } else {
+      params.set("email", email);
+    }
+    params.set("year", String(new Date().getFullYear()));
+
+    const response = await fetch(`/api/progress/calendar?${params.toString()}`);
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(payload.error || "Unable to load weekly map.");
+    }
+
+    const dayCounts = Array.isArray(payload.calendar?.dayCounts) ? payload.calendar.dayCounts : [];
+    const countMap = new Map(dayCounts.map((entry) => [entry.date, Number(entry.count) || 0]));
+    const weekMap = [false, false, false, false, false, false, false];
+    const mondayStart = getMondayStartUtc(new Date());
+
+    for (let dayIndex = 0; dayIndex < 7; dayIndex += 1) {
+      const key = toUtcDateKey(addDaysUtc(mondayStart, dayIndex));
+      weekMap[dayIndex] = (countMap.get(key) || 0) > 0;
+    }
+
+    saveWeeklyMap(weekMap);
+    renderWeeklyMap();
+  } catch (_error) {
+    renderWeeklyMap();
+  }
+}
+
+function toUtcDateKey(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function getMondayStartUtc(dateInput) {
+  const date = new Date(dateInput);
+  const day = (date.getUTCDay() + 6) % 7;
+  const start = new Date(date);
+  start.setUTCDate(start.getUTCDate() - day);
+  start.setUTCHours(0, 0, 0, 0);
+  return start;
+}
+
+function addDaysUtc(baseDate, days) {
+  const date = new Date(baseDate);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date;
+}
+
+function getHeatLevel(count) {
+  if (count >= 6) {
+    return 4;
+  }
+  if (count >= 4) {
+    return 3;
+  }
+  if (count >= 2) {
+    return 2;
+  }
+  if (count >= 1) {
+    return 1;
+  }
+  return 0;
+}
+
+function renderWorkoutMap({ startDate, endDate, dayCounts }) {
+  if (!workoutHeatmap || !workoutMonths) {
+    return;
+  }
+
+  workoutHeatmap.innerHTML = "";
+  workoutMonths.innerHTML = "";
+
+  const rangeStart = new Date(startDate);
+  const rangeEnd = new Date(endDate);
+  const countsMap = new Map((dayCounts || []).map((entry) => [entry.date, Number(entry.count) || 0]));
+  const gridStart = getMondayStartUtc(rangeStart);
+  const gridEnd = addDaysUtc(getMondayStartUtc(addDaysUtc(rangeEnd, -1)), 7);
+  const totalDays = Math.max(1, Math.round((gridEnd.getTime() - gridStart.getTime()) / 86400000));
+  const totalWeeks = Math.ceil(totalDays / 7);
+
+  workoutHeatmap.style.gridTemplateColumns = `repeat(${totalWeeks}, 13px)`;
+  workoutMonths.style.gridTemplateColumns = `repeat(${totalWeeks}, 13px)`;
+
+  let activeDayCount = 0;
+  let totalCompletedGames = 0;
+
+  for (let weekIndex = 0; weekIndex < totalWeeks; weekIndex += 1) {
+    for (let row = 0; row < 7; row += 1) {
+      const dayOffset = weekIndex * 7 + row;
+      const date = addDaysUtc(gridStart, dayOffset);
+      const dayKey = toUtcDateKey(date);
+      const count = countsMap.get(dayKey) || 0;
+      const level = getHeatLevel(count);
+      const insideRange = date >= rangeStart && date < rangeEnd;
+
+      if (insideRange && count > 0) {
+        activeDayCount += 1;
+        totalCompletedGames += count;
+      }
+
+      const cell = document.createElement("span");
+      cell.className = `heat-cell level-${level}${insideRange ? "" : " outside"}`;
+      const formattedDate = date.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        timeZone: "UTC"
+      });
+      cell.title = `${formattedDate}: ${count} game${count === 1 ? "" : "s"} played`;
+      workoutHeatmap.appendChild(cell);
+    }
+  }
+
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthCursor = new Date(Date.UTC(rangeStart.getUTCFullYear(), rangeStart.getUTCMonth(), 1));
+  while (monthCursor < rangeEnd) {
+    const monthStart = new Date(monthCursor);
+    const weekIndex = Math.floor((monthStart.getTime() - gridStart.getTime()) / (7 * 86400000));
+    const label = document.createElement("span");
+    label.style.gridColumnStart = String(weekIndex + 1);
+    label.textContent = monthNames[monthStart.getUTCMonth()];
+    workoutMonths.appendChild(label);
+    monthCursor.setUTCMonth(monthCursor.getUTCMonth() + 1);
+  }
+
+  if (progressCopy) {
+    progressCopy.textContent = `${activeDayCount} active day${activeDayCount === 1 ? "" : "s"} this year, ${totalCompletedGames} total games completed.`;
+  }
+}
+
+async function loadWorkoutMap() {
+  if (!workoutHeatmap) {
+    return;
+  }
+
+  const { userId, email } = getUserLookup();
+  if (!userId && !email) {
+    return;
+  }
+
+  const now = new Date();
+  const rangeStart = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+  const rangeEnd = new Date(Date.UTC(now.getUTCFullYear() + 1, 0, 1));
+  const years = [rangeStart.getUTCFullYear()];
+
+  try {
+    const responses = await Promise.all(
+      years.map(async (year) => {
+        const params = new URLSearchParams();
+        if (userId) {
+          params.set("userId", userId);
+        } else {
+          params.set("email", email);
+        }
+        params.set("year", String(year));
+        const response = await fetch(`/api/progress/calendar?${params.toString()}`);
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(payload.error || "Unable to load workout map.");
+        }
+        const calendar = payload.calendar || {};
+        return Array.isArray(calendar.dayCounts) ? calendar.dayCounts : [];
+      })
+    );
+
+    const mergedDayCounts = responses.flat();
+    renderWorkoutMap({
+      startDate: rangeStart,
+      endDate: rangeEnd,
+      dayCounts: mergedDayCounts
+    });
+  } catch (_error) {
+    if (progressCopy) {
+    progressCopy.textContent = "Unable to load workout map right now.";
+  }
+}
+}
+
 function markTodayCompleted() {
-  const weeklyMap = loadWeeklyMap();
-  weeklyMap[TODAY_INDEX] = true;
-  saveWeeklyMap(weeklyMap);
-  renderWeeklyMap();
+  loadWeeklyMapFromDatabase();
+  loadWorkoutMap();
 }
 
 function updateActiveNavLink() {
@@ -664,7 +1047,8 @@ function renderRecentCompletions(entries) {
 
     const game = document.createElement("p");
     game.className = "recent-game";
-    game.textContent = `${entry.gameName} (Stage ${entry.stage}/${entry.totalStages})`;
+    const displayName = getGameDisplayName(entry.gameId, entry.gameName);
+    game.textContent = `${displayName} (Stage ${entry.stage}/${entry.totalStages})`;
 
     const detail = document.createElement("p");
     detail.className = "recent-detail";
@@ -732,6 +1116,124 @@ async function loadProgressSummary() {
       scoreGraphStatus.dataset.state = "error";
     }
   }
+}
+
+async function loadGoalProgress(goalSettings) {
+  if (
+    !goalPeriodLabel ||
+    !goalAchievedDays ||
+    !goalTargetDays ||
+    !goalAchievedSessions ||
+    !goalTargetSessions ||
+    !goalDaysFill ||
+    !goalSessionsFill ||
+    !goalAchievementText
+  ) {
+    return;
+  }
+
+  const settings = normalizeGoalSettings(goalSettings || getGoalSettingsForPeriod("week"));
+  const targetDays = settings.days;
+  const targetSessions = settings.days * settings.timesPerDay;
+
+  goalPeriodLabel.textContent = getPeriodLabel(settings.period);
+  goalTargetDays.textContent = String(targetDays);
+  goalTargetSessions.textContent = String(targetSessions);
+
+  const { userId, email } = getUserLookup();
+  if (!userId && !email) {
+    setGoalStatus("Please log in again to load goal progress.", "error");
+    return;
+  }
+
+  setGoalStatus("Loading goal progress...");
+
+  const params = new URLSearchParams();
+  if (userId) {
+    params.set("userId", userId);
+  } else {
+    params.set("email", email);
+  }
+  params.set("period", settings.period);
+
+  try {
+    const response = await fetch(`/api/progress/goal-progress?${params.toString()}`);
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(payload.error || "Unable to load goal progress.");
+    }
+
+    const progress = payload.goalProgress || {};
+    const achievedDays = Number(progress.achievedDays) || 0;
+    const achievedSessions = Number(progress.achievedSessions) || 0;
+
+    goalAchievedDays.textContent = String(achievedDays);
+    goalAchievedSessions.textContent = String(achievedSessions);
+
+    const dayProgressPercent = toPercent(achievedDays, targetDays);
+    const sessionProgressPercent = toPercent(achievedSessions, targetSessions);
+    const overallPercent = Math.round((dayProgressPercent + sessionProgressPercent) / 2);
+
+    goalDaysFill.style.width = `${dayProgressPercent}%`;
+    goalSessionsFill.style.width = `${sessionProgressPercent}%`;
+    goalAchievementText.textContent = `You have achieved ${overallPercent}% of your goal (${dayProgressPercent}% days, ${sessionProgressPercent}% sessions).`;
+    setGoalStatus("Goal progress updated.", "success");
+  } catch (error) {
+    setGoalStatus(error.message || "Unable to load goal progress right now.", "error");
+  }
+}
+
+async function setupGoalForm() {
+  if (!goalForm || !goalPeriodInput || !goalDaysInput || !goalTimesInput) {
+    return;
+  }
+
+  try {
+    setGoalStatus("Loading saved goals...");
+    await fetchGoalSettingsFromDatabase();
+  } catch (error) {
+    setGoalStatus(error.message || "Unable to load saved goals. Using defaults.", "error");
+  }
+
+  const applyPeriodToForm = (period) => {
+    const settings = getGoalSettingsForPeriod(period);
+    goalPeriodInput.value = settings.period;
+    updateGoalDaysInputLimit(settings.period);
+    goalDaysInput.value = String(settings.days);
+    goalTimesInput.value = String(settings.timesPerDay);
+    return settings;
+  };
+
+  const initialSettings = applyPeriodToForm(goalPeriodInput.value || "week");
+  loadGoalProgress(initialSettings);
+
+  goalPeriodInput.addEventListener("change", () => {
+    const settings = applyPeriodToForm(goalPeriodInput.value);
+    loadGoalProgress(settings);
+  });
+
+  goalForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const draftSettings = normalizeGoalSettings({
+      period: goalPeriodInput.value,
+      days: goalDaysInput.value,
+      timesPerDay: goalTimesInput.value
+    });
+
+    try {
+      setGoalStatus("Saving goal...");
+      const savedSettings = await saveGoalSettingToDatabase(draftSettings);
+      goalPeriodInput.value = savedSettings.period;
+      updateGoalDaysInputLimit(savedSettings.period);
+      goalDaysInput.value = String(savedSettings.days);
+      goalTimesInput.value = String(savedSettings.timesPerDay);
+      setGoalStatus("Goal saved to database.", "success");
+      loadGoalProgress(savedSettings);
+    } catch (error) {
+      setGoalStatus(error.message || "Unable to save goal.", "error");
+    }
+  });
 }
 
 if (userNameElement) {
@@ -820,6 +1322,7 @@ if (settingsForm && settingsEmailNotifications && settingsSoundEffects && settin
 }
 
 setupProfileMenu();
+setupGoalForm();
 setupRecentCompletionsToggle();
 setupGameProgressTracking();
 
@@ -856,6 +1359,8 @@ navButtons.forEach((button) => {
 window.addEventListener("scroll", updateActiveNavLink, { passive: true });
 
 renderWeeklyMap();
+loadWeeklyMapFromDatabase();
+loadWorkoutMap();
 updateActiveNavLink();
 loadProgressSummary();
 
