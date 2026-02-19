@@ -78,3 +78,7 @@ Track Progress:
 
 Stress Busters:
 <img width="2474" height="1402" alt="Screenshot 2026-02-19 183359" src="https://github.com/user-attachments/assets/fbd4565c-7bb6-4533-8f55-a9863459ea9a" />
+
+
+Demo Video:
+https://amritavishwavidyapeetham-my.sharepoint.com/:v:/g/personal/cb_sc_u4cse24155_cb_students_amrita_edu/IQBtZsATJ5eMT65qWvPewQSNAcjCcrZ5ZCfuexreCaxwpfE?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=y3C58v
