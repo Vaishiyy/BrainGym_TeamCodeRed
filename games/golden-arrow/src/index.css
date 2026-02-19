@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 45 100% 96%;
+    --foreground: 40 60% 12%;
+
+    --card: 45 80% 92%;
+    --card-foreground: 40 60% 12%;
+
+    --popover: 45 80% 94%;
+    --popover-foreground: 40 60% 12%;
+
+    --primary: 45 100% 50%;
+    --primary-foreground: 40 60% 12%;
+
+    --secondary: 38 90% 60%;
+    --secondary-foreground: 40 60% 12%;
+
+    --muted: 45 40% 88%;
+    --muted-foreground: 40 30% 40%;
+
+    --accent: 30 100% 55%;
+    --accent-foreground: 40 60% 12%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 40 50% 80%;
+    --input: 40 50% 80%;
+    --ring: 45 100% 50%;
+
+    --radius: 1rem;
+
+    --game-bg: 45 60% 20%;
+    --game-surface: 45 50% 28%;
+    --game-text: 45 100% 92%;
+    --game-arrow: 45 100% 60%;
+    --game-arrow-active: 45 100% 75%;
+    --game-correct: 140 60% 50%;
+    --game-wrong: 0 70% 55%;
+    --game-glow: 45 100% 50%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fredoka', sans-serif;
+  }
+}

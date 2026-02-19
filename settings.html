@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Gym | Settings</title>
+  <meta name="description" content="Manage your Brain Gym settings." />
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="topbar">
+    <a class="brand" href="home.html">
+      <span class="brand-title">BRAIN GYM</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="nav-btn" href="home.html">Home</a>
+      <a class="nav-btn" href="track-progress.html">Track Progress</a>
+      <a class="nav-btn" href="set-goals.html">Set Goals</a>
+      <a class="nav-btn" href="home.html#map-section">Daily Workout Map</a>
+    </nav>
+
+    <div class="account">
+      <button id="sign-out-btn" class="signout-btn" type="button">Sign Out</button>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+  </header>
+
+  <main class="content-page">
+    <p class="welcome">Welcome, <span id="user-name">Player</span></p>
+    <h1 class="page-heading">Settings</h1>
+
+    <form id="settings-form" class="form-card">
+      <label class="setting-row">
+        <input id="setting-email-notifications" type="checkbox" />
+        <span>Email Notifications</span>
+      </label>
+
+      <label class="setting-row">
+        <input id="setting-sound-effects" type="checkbox" />
+        <span>Sound Effects</span>
+      </label>
+
+      <label class="setting-row">
+        <input id="setting-high-contrast" type="checkbox" />
+        <span>High Contrast Mode</span>
+      </label>
+
+      <button class="save-btn" type="submit">Save Settings</button>
+      <p id="settings-status" class="status-text" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <script src="home.js" defer></script>
+</body>
+</html>

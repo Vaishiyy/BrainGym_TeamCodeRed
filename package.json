@@ -1,0 +1,16 @@
+{
+  "name": "brain-gym",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Brain Gym landing and login pages with MongoDB backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "mongodb": "^6.18.0"
+  }
+}

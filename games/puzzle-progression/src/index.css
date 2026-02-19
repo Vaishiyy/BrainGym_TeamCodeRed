@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 338 100% 97%;
+    --foreground: 334 41% 17%;
+
+    --card: 340 100% 99%;
+    --card-foreground: 334 41% 17%;
+
+    --popover: 340 100% 99%;
+    --popover-foreground: 334 41% 17%;
+
+    --primary: 332 86% 44%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 335 78% 92%;
+    --secondary-foreground: 334 41% 17%;
+
+    --muted: 334 63% 94%;
+    --muted-foreground: 335 26% 38%;
+
+    --accent: 325 92% 64%;
+    --accent-foreground: 334 41% 17%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 333 53% 78%;
+    --input: 333 53% 78%;
+    --ring: 325 92% 64%;
+
+    --radius: 0.5rem;
+
+    --tile-bg: 340 100% 99%;
+    --tile-border: 333 53% 78%;
+    --tile-correct-border: 325 92% 64%;
+    --tile-empty: 335 78% 92%;
+
+    --sidebar-background: 340 100% 99%;
+    --sidebar-foreground: 334 41% 17%;
+    --sidebar-primary: 332 86% 44%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 335 78% 92%;
+    --sidebar-accent-foreground: 334 41% 17%;
+    --sidebar-border: 333 53% 78%;
+    --sidebar-ring: 325 92% 64%;
+  }
+
+  .dark {
+    --background: 332 40% 9%;
+    --foreground: 336 100% 96%;
+    --card: 332 36% 13%;
+    --card-foreground: 336 100% 96%;
+    --popover: 332 36% 13%;
+    --popover-foreground: 336 100% 96%;
+    --primary: 325 92% 64%;
+    --primary-foreground: 332 40% 9%;
+    --secondary: 332 33% 19%;
+    --secondary-foreground: 336 100% 96%;
+    --muted: 332 33% 19%;
+    --muted-foreground: 334 27% 72%;
+    --accent: 318 87% 69%;
+    --accent-foreground: 332 40% 9%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 332 25% 30%;
+    --input: 332 25% 30%;
+    --ring: 318 87% 69%;
+    --tile-bg: 332 36% 13%;
+    --tile-border: 332 25% 30%;
+    --tile-correct-border: 318 87% 69%;
+    --tile-empty: 332 40% 9%;
+    --sidebar-background: 332 36% 13%;
+    --sidebar-foreground: 336 100% 96%;
+    --sidebar-primary: 325 92% 64%;
+    --sidebar-primary-foreground: 332 40% 9%;
+    --sidebar-accent: 332 33% 19%;
+    --sidebar-accent-foreground: 336 100% 96%;
+    --sidebar-border: 332 25% 30%;
+    --sidebar-ring: 318 87% 69%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+}

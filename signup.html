@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Gym | Sign Up</title>
+  <meta name="description" content="Create your Brain Gym account and start tracking your progress." />
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <main class="login-layout">
+    <section class="login-panel" aria-labelledby="signup-title">
+      <header class="topbar">
+        <a class="brand" href="index.html">
+          <span class="brand-dot" aria-hidden="true"></span>
+          <span class="brand-text">BRAIN GYM</span>
+        </a>
+
+        <a class="btn btn-ghost btn-small" href="index.html">Back Home</a>
+      </header>
+
+      <section class="login-content">
+        <article class="login-card">
+          <p class="micro-label">CREATE ACCOUNT</p>
+          <h1 id="signup-title" class="title">Sign Up</h1>
+          <p class="subtitle">Set up your account to save scores, streaks, and play history.</p>
+
+          <form id="signup-form" class="form" novalidate>
+            <label class="field">
+              <span>Name</span>
+              <input id="name" name="name" type="text" autocomplete="name" required />
+            </label>
+
+            <label class="field">
+              <span>Date of Birth</span>
+              <input id="date-of-birth" name="dateOfBirth" type="date" required />
+            </label>
+
+            <label class="field">
+              <span>Email</span>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </label>
+
+            <label class="field">
+              <span>Password</span>
+              <input id="password" name="password" type="password" autocomplete="new-password" required />
+            </label>
+
+            <label class="field">
+              <span>Verify Password</span>
+              <input id="verify-password" name="verifyPassword" type="password" autocomplete="new-password" required />
+            </label>
+
+            <button id="submit-btn" class="btn btn-primary" type="submit">Create Account</button>
+            <p id="status-msg" class="status" aria-live="polite"></p>
+          </form>
+
+          <p class="auth-switch">
+            Already have an account?
+            <a href="login.html">Login</a>
+          </p>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <script src="signup.js" defer></script>
+</body>
+</html>

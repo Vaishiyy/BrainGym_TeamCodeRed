@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Gym | Relaxation Games</title>
+  <meta name="description" content="Relax and recharge with calming mini games from Brain Gym." />
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="topbar">
+    <a class="brand" href="home.html">
+      <span class="brand-title">BRAIN GYM</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="nav-btn" href="home.html">Home</a>
+      <a class="nav-btn" href="track-progress.html">Track Progress</a>
+      <a class="nav-btn" href="set-goals.html">Set Goals</a>
+      <a class="nav-btn" href="home.html#map-section">Daily Workout Map</a>
+    </nav>
+
+    <div class="account">
+      <button id="sign-out-btn" class="signout-btn" type="button">Sign Out</button>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+  </header>
+
+  <main class="content-page">
+    <div class="back-home-row">
+      <button class="relax-arrow-btn up-arrow-btn" id="back-home-btn" type="button" aria-label="Go back to home page">
+        <span class="arrow arrow-up" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <p class="welcome">Welcome, <span id="user-name">Player</span></p>
+    <h1 class="page-heading">Had a Long day ? Play these relaxation games below</h1>
+
+    <section class="relax-grid" aria-label="Relaxation games">
+      <article class="relax-card">
+        <h2>Breathing Bubbles</h2>
+        <p>Follow a calm inhale and exhale rhythm with animated bubbles.</p>
+      </article>
+      <article class="relax-card">
+        <h2>Zen Pattern Match</h2>
+        <p>Light memory game with slow pace and soft visual cues.</p>
+      </article>
+      <article class="relax-card">
+        <h2>Color Flow</h2>
+        <p>Sort relaxing color streams to settle focus and unwind.</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="home.js" defer></script>
+</body>
+</html>

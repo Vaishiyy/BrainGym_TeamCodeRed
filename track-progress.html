@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Gym | Track Progress</title>
+  <meta name="description" content="Track your workout consistency and progress in Brain Gym." />
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="topbar">
+    <a class="brand" href="home.html">
+      <span class="brand-title">BRAIN GYM</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="nav-btn" href="home.html">Home</a>
+      <a class="nav-btn active" href="track-progress.html">Track Progress</a>
+      <a class="nav-btn" href="set-goals.html">Set Goals</a>
+      <a class="nav-btn" href="home.html#map-section">Daily Workout Map</a>
+    </nav>
+
+    <div class="account">
+      <button id="sign-out-btn" class="signout-btn" type="button">Sign Out</button>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+  </header>
+
+  <main class="content-page">
+    <p class="welcome">Welcome, <span id="user-name">Player</span></p>
+    <h1 class="page-heading">Track Progress</h1>
+    <p class="page-copy">Your consistency is your superpower. Complete daily workouts and keep your streak alive.</p>
+
+    <section class="progress-summary" aria-label="Progress summary">
+      <div class="progress-card">
+        <h2>Total Games</h2>
+        <p id="metric-total-games">0</p>
+      </div>
+      <div class="progress-card">
+        <h2>Total Score</h2>
+        <p id="metric-total-score">0</p>
+      </div>
+      <div class="progress-card">
+        <h2>Total Time</h2>
+        <p id="metric-total-time">0m 0s</p>
+      </div>
+      <div class="progress-card">
+        <h2>Average Time</h2>
+        <p id="metric-average-time">0s</p>
+      </div>
+      <div class="progress-card">
+        <h2>Fastest Game</h2>
+        <p id="metric-fastest-time">0s</p>
+      </div>
+    </section>
+
+    <section class="profile-card progress-graph-card">
+      <h2 class="history-title">Score Progress Graph</h2>
+      <p id="score-graph-status" class="status-text">Loading score graph...</p>
+      <div id="score-legend" class="score-legend"></div>
+      <div class="score-chart-wrap">
+        <svg id="score-chart" class="score-chart" viewBox="0 0 900 360" role="img" aria-label="Line graph of game scores"></svg>
+      </div>
+    </section>
+
+    <section class="profile-card progress-history collapsed">
+      <div class="history-head">
+        <h2 class="history-title">Recent Completions</h2>
+        <button
+          id="recent-toggle-btn"
+          class="collapse-btn"
+          type="button"
+          aria-expanded="false"
+          aria-controls="recent-completions-list"
+          aria-label="Expand recent completions"
+        >
+          ▼
+        </button>
+      </div>
+      <p id="progress-summary-status" class="status-text">Loading progress...</p>
+      <div id="recent-completions-list" class="recent-list"></div>
+    </section>
+  </main>
+
+  <script src="home.js" defer></script>
+</body>
+</html>

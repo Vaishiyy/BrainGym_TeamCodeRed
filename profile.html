@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Gym | My Profile</title>
+  <meta name="description" content="View your Brain Gym profile information." />
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="topbar">
+    <a class="brand" href="home.html">
+      <span class="brand-title">BRAIN GYM</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="nav-btn" href="home.html">Home</a>
+      <a class="nav-btn" href="track-progress.html">Track Progress</a>
+      <a class="nav-btn" href="set-goals.html">Set Goals</a>
+      <a class="nav-btn" href="home.html#map-section">Daily Workout Map</a>
+    </nav>
+
+    <div class="account">
+      <button id="sign-out-btn" class="signout-btn" type="button">Sign Out</button>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+  </header>
+
+  <main class="content-page">
+    <p class="welcome">Welcome, <span id="user-name">Player</span></p>
+    <h1 class="page-heading">Profile Information</h1>
+
+    <section class="profile-card" aria-label="Profile information">
+      <p><strong>Name:</strong> <span id="profile-name-value">Not provided</span></p>
+      <p><strong>Email:</strong> <span id="profile-email-value">Not provided</span></p>
+      <p><strong>Date of Birth:</strong> <span id="profile-dob-value">Not provided</span></p>
+    </section>
+  </main>
+
+  <script src="home.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Gym | Home</title>
+  <meta name="description" content="Brain Gym home dashboard for daily workouts, progress, and goals." />
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="topbar">
+    <a class="brand" href="home.html">
+      <span class="brand-title">BRAIN GYM</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="nav-btn active" href="#home-section">Home</a>
+      <a class="nav-btn" href="track-progress.html">Track Progress</a>
+      <a class="nav-btn" href="set-goals.html">Set Goals</a>
+      <a class="nav-btn" href="#map-section">Daily Workout Map</a>
+    </nav>
+
+    <div class="account">
+      <button id="sign-out-btn" class="signout-btn" type="button">Sign Out</button>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+  </header>
+
+  <main class="home-layout">
+    <section class="hero" id="home-section">
+      <p class="welcome">Welcome, <span id="user-name">Player</span></p>
+      <h1 class="hero-title">Start Your<br />Daily Brain Workout</h1>
+      <button id="start-workout-btn" class="start-btn" type="button">Start</button>
+    </section>
+
+    <section class="map-panel" id="map-section">
+      <h2 class="panel-title">Your Weekly Map</h2>
+      <div class="weekly-map" id="weekly-map" aria-label="Weekly workout completion tracker">
+        <div class="day-card">
+          <p>Mon</p>
+          <span id="day-0" class="check-box" aria-label="Monday status"></span>
+        </div>
+        <div class="day-card">
+          <p>Tue</p>
+          <span id="day-1" class="check-box" aria-label="Tuesday status"></span>
+        </div>
+        <div class="day-card">
+          <p>Wed</p>
+          <span id="day-2" class="check-box" aria-label="Wednesday status"></span>
+        </div>
+        <div class="day-card">
+          <p>Thu</p>
+          <span id="day-3" class="check-box" aria-label="Thursday status"></span>
+        </div>
+        <div class="day-card">
+          <p>Fri</p>
+          <span id="day-4" class="check-box" aria-label="Friday status"></span>
+        </div>
+        <div class="day-card">
+          <p>Sat</p>
+          <span id="day-5" class="check-box" aria-label="Saturday status"></span>
+        </div>
+        <div class="day-card">
+          <p>Sun</p>
+          <span id="day-6" class="check-box" aria-label="Sunday status"></span>
+        </div>
+      </div>
+      <p id="map-hint" class="panel-copy">Complete at least one game to mark today as done.</p>
+    </section>
+
+    <section class="relax">
+      <h2>Wanna Relax</h2>
+      <button class="relax-arrow-btn" id="relax-arrow-btn" type="button" aria-label="Go to relaxation games">
+        <span class="arrow" aria-hidden="true"></span>
+      </button>
+    </section>
+  </main>
+
+  <script src="home.js" defer></script>
+</body>
+</html>

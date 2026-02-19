@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+@layer base {
+  :root {
+    --background: 52 100% 92%;
+    --foreground: 210 70% 35%;
+
+    --card: 50 100% 88%;
+    --card-foreground: 210 70% 35%;
+
+    --popover: 50 100% 88%;
+    --popover-foreground: 210 70% 35%;
+
+    --primary: 210 72% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 340 70% 88%;
+    --secondary-foreground: 210 70% 35%;
+
+    --muted: 48 60% 84%;
+    --muted-foreground: 210 35% 45%;
+
+    --accent: 145 50% 78%;
+    --accent-foreground: 210 70% 35%;
+
+    --destructive: 340 70% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 45 55% 72%;
+    --input: 45 55% 72%;
+    --ring: 210 72% 45%;
+
+    --radius: 0.25rem;
+
+    /* Simon game colors - pastel palette */
+    --simon-green: 145 50% 74%;
+    --simon-green-glow: 145 65% 86%;
+    --simon-red: 340 72% 82%;
+    --simon-red-glow: 340 85% 90%;
+    --simon-yellow: 50 95% 78%;
+    --simon-yellow-glow: 50 100% 88%;
+    --simon-blue: 205 78% 78%;
+    --simon-blue-glow: 205 90% 88%;
+
+    --sidebar-background: 52 100% 92%;
+    --sidebar-foreground: 210 70% 35%;
+    --sidebar-primary: 210 72% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 48 60% 84%;
+    --sidebar-accent-foreground: 210 70% 35%;
+    --sidebar-border: 45 55% 72%;
+    --sidebar-ring: 210 72% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'VT323', monospace;
+    image-rendering: pixelated;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Press Start 2P', monospace;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Press Start 2P', monospace;
+  }
+
+  .font-body {
+    font-family: 'VT323', monospace;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 8px hsl(0 0% 90% / 0.7), 0 0 20px hsl(0 0% 90% / 0.3);
+  }
+
+  .text-glow-sm {
+    text-shadow: 0 0 6px hsl(0 0% 90% / 0.5);
+  }
+
+  /* CRT scanline overlay */
+  .crt-overlay {
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      hsl(0 0% 0% / 0.12) 2px,
+      hsl(0 0% 0% / 0.12) 4px
+    );
+    pointer-events: none;
+  }
+
+  .pixel-border {
+    box-shadow:
+      4px 0 0 0 hsl(var(--border)),
+      -4px 0 0 0 hsl(var(--border)),
+      0 4px 0 0 hsl(var(--border)),
+      0 -4px 0 0 hsl(var(--border));
+  }
+}

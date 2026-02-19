@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Gym | Login</title>
+  <meta name="description" content="Login to Brain Gym and continue your daily mind training." />
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <main class="login-layout">
+    <section class="login-panel" aria-labelledby="login-title">
+      <header class="topbar">
+        <a class="brand" href="index.html">
+          <span class="brand-dot" aria-hidden="true"></span>
+          <span class="brand-text">BRAIN GYM</span>
+        </a>
+
+        <a class="btn btn-ghost btn-small" href="index.html">Back Home</a>
+      </header>
+
+      <section class="login-content">
+        <article class="login-card">
+          <p class="micro-label">WELCOME BACK</p>
+          <h1 id="login-title" class="title">Login</h1>
+          <p class="subtitle">Enter your details to continue your daily training streak.</p>
+
+          <form id="login-form" class="form" novalidate>
+            <label class="field">
+              <span>Email</span>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </label>
+
+            <label class="field">
+              <span>Password</span>
+              <input id="password" name="password" type="password" autocomplete="current-password" required />
+            </label>
+
+            <button id="submit-btn" class="btn btn-primary" type="submit">Login</button>
+            <p id="status-msg" class="status" aria-live="polite"></p>
+          </form>
+
+          <p class="auth-switch">
+            Don't have an account?
+            <a href="signup.html">Sign up</a>
+          </p>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <script src="login.js" defer></script>
+</body>
+</html>

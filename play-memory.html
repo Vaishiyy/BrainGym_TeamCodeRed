@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Gym | Memory Game</title>
+  <meta name="description" content="Play the Brain Gym memory game as your first daily challenge." />
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+
+  <header class="topbar">
+    <a class="brand" href="home.html">
+      <span class="brand-title">BRAIN GYM</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="nav-btn" href="home.html">Home</a>
+      <a class="nav-btn" href="track-progress.html">Track Progress</a>
+      <a class="nav-btn" href="set-goals.html">Set Goals</a>
+      <a class="nav-btn" href="home.html#map-section">Daily Workout Map</a>
+    </nav>
+
+    <div class="account">
+      <button id="sign-out-btn" class="signout-btn" type="button">Sign Out</button>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+  </header>
+
+  <main
+    class="content-page game-page"
+    data-game-id="memory-game"
+    data-game-name="Memory Game"
+    data-stage="1"
+    data-total-stages="5"
+  >
+    <p class="welcome">Stage 1 of 5</p>
+    <h1 class="page-heading">Memory Game</h1>
+    <p class="page-copy game-timer" id="game-timer">Time: 00:00</p>
+
+    <section class="game-frame-wrap">
+      <iframe
+        class="game-frame"
+        title="Memory Game"
+        src="games/memory-game/dist/index.html"
+      ></iframe>
+    </section>
+
+    <p id="game-save-status" class="status-text"></p>
+    <div class="game-actions">
+      <a id="game-next-btn" class="nav-btn active game-next-btn" href="play-neon.html">Next Game: Reaction Game</a>
+    </div>
+  </main>
+
+  <script src="home.js" defer></script>
+</body>
+</html>
