@@ -67,6 +67,24 @@ npm start
 { "ok": true }
 ```
 
+## Deployment (Render)
+This project is configured for Render using `render.yaml`.
+
+1. Push this project to GitHub.
+2. In Render, click **New +** -> **Blueprint**.
+3. Connect your GitHub repo.
+4. Render will detect `render.yaml` and create the web service.
+5. Set environment variable:
+   - `MONGODB_URI` = your MongoDB Atlas connection string
+6. Deploy.
+
+After deploy, open:
+- `https://<your-render-service>.onrender.com`
+
+### Important Before Deploy
+- Keep extracted game folders in `games/**/dist` (required).
+- Zip files are not needed in production. Remove them from the repo if possible to reduce deploy size.
+
 
 Screenshots:
 
